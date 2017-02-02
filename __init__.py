@@ -6,5 +6,5 @@ from .bench import Bench
 
 def register():
     Pool.register(
-	Bench
+	Bench,
         module='bench', type_='model')

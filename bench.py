@@ -33,7 +33,7 @@ def do_bench(iterations=10):
 class Bench(Model):
     'Benchmark class for tools'
 
-    __name__ = 'utils.benchmark_class'
+    __name__ = 'bench'
 
     @classmethod
     def __setup__(cls):
@@ -51,8 +51,8 @@ class Bench(Model):
     @classmethod
     def list(cls):
         return {
-            'setup': ['setup'],
-            'teardown': ['teardown'],
+            'setup': 'setup',
+            'teardown': 'teardown',
             'methods': [
                 ('test_latency', {
                         'name': 'Latency',
