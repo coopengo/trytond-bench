@@ -27,7 +27,7 @@ def do_bench(iterations=10):
                 'iterations': iterations,
                 'average': average,
                 'minimum': times[0],
-                'maximum': times[1],
+                'maximum': times[-1],
                 }
         return wrapped
     return decorator
