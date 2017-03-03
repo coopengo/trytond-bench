@@ -27,7 +27,7 @@ def do_bench(iterations=10):
                 'iterations': iterations,
                 'average': average,
                 'minimum': times[0],
-                'maximum': times[1]
+                'maximum': times[1],
                 }
         return wrapped
     return decorator
@@ -61,37 +61,37 @@ class Bench(Model):
                     'method': 'test_latency',
                     'name': 'Latency',
                     'server_side': False,
-                    'requires_setup': False,
+                    'setup': False,
                 },
                 {
                     'method': 'test_cpu',
                     'name': 'CPU',
                     'server_side': True,
-                    'requires_setup': False,
+                    'setup': False,
                 },
                 {
                     'method': 'test_memory',
                     'name': 'Memory',
                     'server_side': True,
-                    'requires_setup': False,
+                    'setup': False,
                 },
                 {
                     'method': 'test_db_latency',
                     'name': 'DB Latency',
                     'server_side': True,
-                    'requires_setup': False,
+                    'setup': False,
                 },
                 {
                     'method': 'test_db_read',
                     'name': 'DB Read',
                     'server_side': True,
-                    'requires_setup': True,
+                    'setup': True,
                 },
                 {
                     'method': 'test_db_write',
                     'name': 'DB Write',
                     'server_side': True,
-                    'requires_setup': True,
+                    'setup': True,
                 },
                 ]}
 
