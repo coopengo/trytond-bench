@@ -23,9 +23,12 @@ def do_bench(iterations=10):
             # Remove min / max values
             times = sorted(times)
             average = sum(times[1:-1]) / (len(times) - 2)
-            return "%s iterations, avg : %.5f, " % (iterations,
-                average) + 'excluding min (%.5f), max (%.5f)' % (
-                times[0], times[-1])
+            return {
+                'iterations': iterations,
+                'average': average,
+                'minimum': times[0],
+                'maximum': times[-1],
+                }
         return wrapped
     return decorator
 
@@ -54,38 +57,43 @@ class Bench(Model):
             'setup': 'setup',
             'teardown': 'teardown',
             'methods': [
-                ('test_latency', {
-                        'name': 'Latency',
-                        'server_side': False,
-                        'requires_setup': False,
-                        }),
-                ('test_cpu', {
-                        'name': 'CPU',
-                        'server_side': True,
-                        'requires_setup': False,
-                        }),
-                ('test_memory', {
-                        'name': 'Memory',
-                        'server_side': True,
-                        'requires_setup': False,
-                        }),
-                ('test_db_latency', {
-                        'name': 'DB Latency',
-                        'server_side': True,
-                        'requires_setup': False,
-                        }),
-                ('test_db_write', {
-                        'name': 'DB Write',
-                        'server_side': True,
-                        'requires_setup': True,
-                        }),
-                ('test_db_read', {
-                        'name': 'DB Read',
-                        'server_side': True,
-                        'requires_setup': True,
-                        }),
-                ],
-            }
+                {
+                    'method': 'test_latency',
+                    'name': 'Latency',
+                    'server_side': False,
+                    'setup': False,
+                },
+                {
+                    'method': 'test_cpu',
+                    'name': 'CPU',
+                    'server_side': True,
+                    'setup': False,
+                },
+                {
+                    'method': 'test_memory',
+                    'name': 'Memory',
+                    'server_side': True,
+                    'setup': False,
+                },
+                {
+                    'method': 'test_db_latency',
+                    'name': 'DB Latency',
+                    'server_side': True,
+                    'setup': False,
+                },
+                {
+                    'method': 'test_db_read',
+                    'name': 'DB Read',
+                    'server_side': True,
+                    'setup': True,
+                },
+                {
+                    'method': 'test_db_write',
+                    'name': 'DB Write',
+                    'server_side': True,
+                    'setup': True,
+                },
+                ]}
 
     @classmethod
     def setup(cls):
