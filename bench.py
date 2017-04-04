@@ -59,37 +59,37 @@ class Bench(Model):
             'methods': [
                 {
                     'method': 'test_latency',
-                    'name': 'Latency',
+                    'name': 'Latency (client/server)',
                     'server_side': False,
                     'setup': False,
                 },
                 {
                     'method': 'test_cpu',
-                    'name': 'CPU',
+                    'name': 'CPU (10M OPs)',
                     'server_side': True,
                     'setup': False,
                 },
                 {
                     'method': 'test_memory',
-                    'name': 'Memory',
+                    'name': 'Memory (1GB alloc)',
                     'server_side': True,
                     'setup': False,
                 },
                 {
                     'method': 'test_db_latency',
-                    'name': 'DB Latency',
+                    'name': 'DB Latency (1K pings)',
                     'server_side': True,
                     'setup': False,
                 },
                 {
                     'method': 'test_db_read',
-                    'name': 'DB Read',
+                    'name': 'DB Read (100K records)',
                     'server_side': True,
                     'setup': True,
                 },
                 {
                     'method': 'test_db_write',
-                    'name': 'DB Write',
+                    'name': 'DB Write (2K records)',
                     'server_side': True,
                     'setup': True,
                 },
@@ -120,13 +120,10 @@ class Bench(Model):
     @classmethod
     def teardown(cls):
         cursor = Transaction().connection.cursor()
-
-        # Delete table
         cursor.execute('DROP TABLE "benchmark_table"')
 
     @classmethod
     def test_latency(cls):
-        # Do nothing, just test complete overhead
         return
 
     @classmethod
@@ -138,38 +135,36 @@ class Bench(Model):
     @classmethod
     @do_bench(100)
     def test_memory(cls):
-        # Allocate a lot (1GB) of space
         'x' * 1024000000
 
     @classmethod
-    @do_bench(1000)
+    @do_bench(100)
     def test_db_latency(cls):
         cursor = Transaction().connection.cursor()
-        cursor.execute('SELECT 1')
+        for x in range(1000):
+            cursor.execute('SELECT 1')
 
     @classmethod
-    @do_bench(10)
-    def test_db_write(cls):
-        cls._do_benchmark_db_write()
-
-    @classmethod
-    def _do_benchmark_db_write(cls):
+    def write_db_data(cls, nb):
         cursor = Transaction().connection.cursor()
         cursor.execute('TRUNCATE TABLE "benchmark_table"')
-        for x in range(100000):
+        for x in range(nb):
             cursor.execute('INSERT INTO "benchmark_table" (id, some_string, '
                 "some_date) VALUES (%i, %s, '2016-01-01')" % (x, str(x) * 10))
 
     @classmethod
-    def test_db_read(cls):
-        # Get some data
-        cls._do_benchmark_db_write()
-
-        return cls._do_benchmark_db_read()
+    @do_bench(100)
+    def test_db_write(cls):
+        cls.write_db_data(2000)
 
     @classmethod
     @do_bench(100)
-    def _do_benchmark_db_read(cls):
+    def _test_db_read(cls):
         cursor = Transaction().connection.cursor()
         cursor.execute('SELECT * FROM "benchmark_table" AS a')
+        assert(len(cursor.fetchall()) == 100000)
 
+    @classmethod
+    def test_db_read(cls):
+        cls.write_db_data(100000)
+        return cls._test_db_read()
