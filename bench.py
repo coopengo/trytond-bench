@@ -99,7 +99,7 @@ class Bench(Model):
     def setup(cls):
         cursor = Transaction().connection.cursor()
 
-        if backend.name() != 'postgresql':
+        if backend.name != 'postgresql':
             raise Exception('Database must be postgresql !')
 
         # Check for test table
