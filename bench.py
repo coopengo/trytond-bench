@@ -1,4 +1,6 @@
 from timeit import default_timer as timer
+from psycopg2 import sql
+import datetime
 
 from trytond import backend
 from trytond.model import Model
@@ -104,9 +106,15 @@ class Bench(Model):
 
         # Check for test table
         for schema in Transaction().database.search_path:
-            cursor.execute('SELECT 1 FROM information_schema.tables '
-                "WHERE table_name = 'benchmark_table' AND table_schema = '%s'"
-                % schema)
+            cursor.execute(sql.SQL(
+                "select 1 from {info_schema_table} where {table_name} = %s and "
+                "{table_schema} = %s").format(
+                info_schema_table=sql.SQL('.').join(
+                    [sql.Identifier('information_schema'),
+                     sql.Identifier('tables')]),
+                table_name=sql.Identifier('table_name'),
+                table_schema=sql.Identifier('table_schema')),
+                ['benchmark_table', schema])
             if cursor.rowcount:
                 raise Exception('Benchmark table already in, run '
                     'teardown and try again')
@@ -147,10 +155,13 @@ class Bench(Model):
     @classmethod
     def write_db_data(cls, nb):
         cursor = Transaction().connection.cursor()
-        cursor.execute('TRUNCATE TABLE "benchmark_table"')
+        cursor.execute(sql.SQL("truncate table {table}").format(
+            table=sql.Identifier('benchmark_table')))
         for x in range(nb):
-            cursor.execute('INSERT INTO "benchmark_table" (id, some_string, '
-                "some_date) VALUES (%i, %s, '2016-01-01')" % (x, str(x) * 10))
+            cursor.execute(sql.SQL("insert into {} (id, some_string, some_date)"
+                "values (%s, %s, %s)").format(
+                sql.Identifier('benchmark_table')),
+                [x, str(x) * 10, datetime.date(2016, 1, 1)])
 
     @classmethod
     @do_bench(100)
