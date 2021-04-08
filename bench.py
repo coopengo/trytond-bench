@@ -1,6 +1,7 @@
 from timeit import default_timer as timer
-from psycopg2 import sql
 import datetime
+
+from sql import Table, Literal
 
 from trytond import backend
 from trytond.model import Model
@@ -105,16 +106,11 @@ class Bench(Model):
             raise Exception('Database must be postgresql !')
 
         # Check for test table
+        table = Table('tables', 'information_schema')
         for schema in Transaction().database.search_path:
-            cursor.execute(sql.SQL(
-                "select 1 from {info_schema_table} where {table_name} = %s and "
-                "{table_schema} = %s").format(
-                info_schema_table=sql.SQL('.').join(
-                    [sql.Identifier('information_schema'),
-                     sql.Identifier('tables')]),
-                table_name=sql.Identifier('table_name'),
-                table_schema=sql.Identifier('table_schema')),
-                ['benchmark_table', schema])
+            cursor.execute(*table.select(Literal(1),
+                    where=(table.table_name == 'benchmark_table')
+                    & (table.table_schema == schema)))
             if cursor.rowcount:
                 raise Exception('Benchmark table already in, run '
                     'teardown and try again')
@@ -154,14 +150,14 @@ class Bench(Model):
 
     @classmethod
     def write_db_data(cls, nb):
+        bench_table = Table('benchmark_table')
         cursor = Transaction().connection.cursor()
-        cursor.execute(sql.SQL("truncate table {table}").format(
-            table=sql.Identifier('benchmark_table')))
+        cursor.execute(*bench_table.delete(where=bench_table.id >= 0))
         for x in range(nb):
-            cursor.execute(sql.SQL("insert into {} (id, some_string, some_date)"
-                "values (%s, %s, %s)").format(
-                sql.Identifier('benchmark_table')),
-                [x, str(x) * 10, datetime.date(2016, 1, 1)])
+            cursor.execute(*bench_table.insert(
+                    columns=[bench_table.id, bench_table.some_string,
+                        bench_table.some_date],
+                    values=[[x, str(x) * 10, datetime.date(2016, 1, 1)]]))
 
     @classmethod
     @do_bench(100)
