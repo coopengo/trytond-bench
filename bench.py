@@ -1,3 +1,4 @@
+import gc
 from timeit import default_timer as timer
 import datetime
 
@@ -14,11 +15,13 @@ __all__ = [
     ]
 
 
-def do_bench(iterations=10):
+def do_bench(iterations=10, collect=False):
     def decorator(f):
         def wrapped(*args, **kwargs):
             times = []
             for _ in range(iterations):
+                if collect:
+                    gc.collect()
                 start = timer()
                 f(*args, **kwargs)
                 end = timer()
@@ -137,9 +140,10 @@ class Bench(Model):
             pass
 
     @classmethod
-    @do_bench(100)
+    @do_bench(100, collect=True)
     def test_memory(cls):
-        'x' * 1024000000
+        ['x'] * 1024  # Multiple small allocations
+        'x' * 512000000  # The big one
 
     @classmethod
     @do_bench(100)
