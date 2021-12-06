@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from trytond.i18n import gettext
 from trytond.transaction import Transaction
-from trytond.model.exceptions import UserError
+from trytond.exceptions import UserError
 from trytond.model import ModelView, fields
 from trytond.wizard import Wizard, StateView, Button
 
