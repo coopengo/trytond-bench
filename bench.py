@@ -59,44 +59,62 @@ class Bench(Model):
 
     @classmethod
     def list(cls):
+        '''
+        List of available benchmarks
+
+        A benchmark will have:
+            - name: The name of the benchmark, only used for the reports
+            - setup: A boolean, must be true if the setup step is required
+              before execution
+            - type: One of
+              * latency: Special type, with no parameters, the client will call
+                "test_latency" to evaluate client / server latency
+              * server: Benchmarks a rpc method on the server, without
+                parameters
+              * act_window: Benchmarks client side the opening of an act window
+                There are two parameters:
+                  + action_id: The xml id of the act window (mandatory)
+                  + switch_view: If the client should switch to form view (
+                    defaults to False)
+        '''
         return {
             'setup': 'setup',
             'teardown': 'teardown',
             'methods': [
                 {
-                    'method': 'test_latency',
                     'name': 'Latency (client/server)',
-                    'server_side': False,
+                    'type': 'latency',
+                    'parameters': {},
                     'setup': False,
                 },
                 {
-                    'method': 'test_cpu',
                     'name': 'CPU (10M OPs)',
-                    'server_side': True,
+                    'type': 'server',
+                    'parameters': {'method': 'test_cpu'},
                     'setup': False,
                 },
                 {
-                    'method': 'test_memory',
                     'name': 'Memory (1GB alloc)',
-                    'server_side': True,
+                    'type': 'server',
+                    'parameters': {'method': 'test_memory'},
                     'setup': False,
                 },
                 {
-                    'method': 'test_db_latency',
                     'name': 'DB Latency (1K pings)',
-                    'server_side': True,
+                    'type': 'server',
+                    'parameters': {'method': 'test_db_latency'},
                     'setup': False,
                 },
                 {
-                    'method': 'test_db_read',
                     'name': 'DB Read (100K records)',
-                    'server_side': True,
+                    'type': 'server',
+                    'parameters': {'method': 'test_db_read'},
                     'setup': True,
                 },
                 {
-                    'method': 'test_db_write',
                     'name': 'DB Write (2K records)',
-                    'server_side': True,
+                    'type': 'server',
+                    'parameters': {'method': 'test_db_write'},
                     'setup': True,
                 },
                 ]}
