@@ -9,3 +9,7 @@ msgstr "Identifiant"
 msgctxt "model:bench,name:"
 msgid "Benchmark class for tools"
 msgstr "Outillage pour l'outil de benchmarking "
+
+msgctxt "model:ir.message,text:msg_use_plugin"
+msgid "This wizard must be started from the dedicated client plugin"
+msgstr "Cet assistant doit être démarré via le plugin client dédié"

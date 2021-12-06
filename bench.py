@@ -27,8 +27,8 @@ def do_bench(iterations=10, collect=False):
                 end = timer()
                 times.append(end - start)
             # Remove min / max values
-            times = sorted(times)
-            average = sum(times[1:-1]) / (len(times) - 2)
+            times = sorted(times)[1:-1]
+            average = sum(times) / len(times)
             return {
                 'iterations': iterations,
                 'average': average,
