@@ -26,15 +26,12 @@ class BenchResult(Wizard):
             }
 
     def generate_displayer(self, raw_data):
-        return {
-            'name': raw_data['name'],
-            'average': Decimal(str(raw_data['results']['average'])).quantize(
-                Decimal('0.00001')),
-            'minimum': Decimal(str(raw_data['results']['minimum'])).quantize(
-                Decimal('0.00001')),
-            'maximum': Decimal(str(raw_data['results']['maximum'])).quantize(
-                Decimal('0.00001')),
-            }
+        converted_data = {
+            key: Decimal(str(raw_data['results'][key])).quantize(
+                Decimal('0.00001'))
+            for key in ('average', 'minimum', 'maximum', 'slowest')}
+        converted_data['name'] = raw_data['name']
+        return converted_data
 
 
 class BenchResultView(ModelView):
@@ -53,3 +50,4 @@ class BenchResultDetail(ModelView):
     average = fields.Numeric('Average', readonly=True)
     minimum = fields.Numeric('Minimum', readonly=True)
     maximum = fields.Numeric('Maximum', readonly=True)
+    slowest = fields.Numeric('Slowest (including warmup)', readonly=True)

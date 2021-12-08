@@ -26,14 +26,16 @@ def do_bench(iterations=10, collect=False):
                 f(*args, **kwargs)
                 end = timer()
                 times.append(end - start)
+
             # Remove min / max values
             times = sorted(times)[1:-1]
-            average = sum(times) / len(times)
+            average = sum(times[1:-1]) / (len(times) - 2)
             return {
                 'iterations': iterations,
                 'average': average,
-                'minimum': times[0],
-                'maximum': times[-1],
+                'minimum': times[1],
+                'maximum': times[-2],
+                'slowest': times[-1],
                 }
         return wrapped
     return decorator

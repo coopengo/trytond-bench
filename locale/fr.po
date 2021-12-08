@@ -18,6 +18,10 @@ msgctxt "field:bench.result.detail,name:"
 msgid "Name"
 msgstr "Nom"
 
+msgctxt "field:bench.result.detail,slowest:"
+msgid "Slowest (including warmup)"
+msgstr "Minimum (incluant le préchauffage)"
+
 msgctxt "field:bench.result.view,results:"
 msgid "Results"
 msgstr "Résultats"
