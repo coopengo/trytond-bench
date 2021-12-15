@@ -3,5 +3,23 @@
 this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data>
+        <!-- ################ -->
+        <!-- # Bench Result # -->
+        <!-- ################ -->
+        <record model="ir.ui.view" id="bench_result_view_form">
+            <field name="model">bench.result.view</field>
+            <field name="type">form</field>
+            <field name="name">bench_result_form</field>
+        </record>
+        <record model="ir.ui.view" id="bench_result_detail_list">
+            <field name="model">bench.result.detail</field>
+            <field name="type">tree</field>
+            <field name="name">bench_result_detail_list</field>
+        </record>
+        <record model="ir.action.wizard" id="act_bench_report">
+            <field name="name">Benchmark Results</field>
+            <field name="wiz_name">bench.result</field>
+            <field name="window">True</field>
+        </record>
     </data>
 </tryton>

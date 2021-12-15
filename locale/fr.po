@@ -2,10 +2,50 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:bench,id:"
-msgid "ID"
-msgstr "Identifiant"
+msgctxt "field:bench.result.detail,average:"
+msgid "Average"
+msgstr "Moyenne"
+
+msgctxt "field:bench.result.detail,maximum:"
+msgid "Maximum"
+msgstr "Maximum"
+
+msgctxt "field:bench.result.detail,minimum:"
+msgid "Minimum"
+msgstr "Minimum"
+
+msgctxt "field:bench.result.detail,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:bench.result.detail,slowest:"
+msgid "Slowest (including warmup)"
+msgstr "Minimum (incluant le préchauffage)"
+
+msgctxt "field:bench.result.view,results:"
+msgid "Results"
+msgstr "Résultats"
 
 msgctxt "model:bench,name:"
 msgid "Benchmark class for tools"
-msgstr "Outillage pour l'outil de benchmarking "
+msgstr "Outillage pour l'outil de benchmarking"
+
+msgctxt "model:bench.result.detail,name:"
+msgid "Benchmark Result Detail"
+msgstr "Détail"
+
+msgctxt "model:bench.result.view,name:"
+msgid "Benchmark Result View"
+msgstr "Résultat du Benchmark"
+
+msgctxt "model:ir.action,name:act_bench_report"
+msgid "Benchmark Results"
+msgstr "Résultats du Benchmark"
+
+msgctxt "model:ir.message,text:msg_use_plugin"
+msgid "This wizard must be started from the dedicated client plugin"
+msgstr "Cet assistant doit être démarré via le plugin client dédié"
+
+msgctxt "wizard_button:bench.result,start,end:"
+msgid "Ok"
+msgstr "OK"
